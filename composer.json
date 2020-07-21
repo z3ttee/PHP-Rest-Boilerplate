@@ -1,0 +1,20 @@
+{
+    "name": "zettee/php-rest-api-template",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "z3ttee",
+            "email": "cedric.zitzmann@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { 
+            "App\\": "src/",
+            "App\\Models\\": "src/models/",
+            "App\\Endpoint\\": "src/endpoints/",
+            "App\\Endpoint\\v1\\": "src/endpoints/v1/"
+        }
+    },
+    "require": {}
+}
