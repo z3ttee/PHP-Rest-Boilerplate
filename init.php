@@ -8,7 +8,7 @@ require './vendor/autoload.php';
 require_once 'src/functions/sanatize.php';
 require_once 'src/functions/manipulation.php';
 
-define("API_ROOT", $_SERVER['DOCUMENT_ROOT']);
+define("API_ROOT", __DIR__);
 
 header('Content-Type: application/json');
 

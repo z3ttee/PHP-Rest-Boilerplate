@@ -70,10 +70,23 @@ class Request {
         }
 
         if(!Database::getInstance()->hasConnection()) {
-            throw new \Exception("service unavailable");
+            throw new \Exception("database unavailable");
         }
 
-        // TODO: Check access token in database
+        // Table: userID / token / expiry
+        $result = Database::getInstance()->get('access_tokens', array('token', '=', $bearerCode));
+        if(Database::getInstance()->error() || Database::getInstance()->count() == 0) {
+            throw new \Exception("invalid access token");
+        }
+
+        $result = $result->first();
+        $expiry = $result->expiry;
+
+        $currentTime = round(microtime(true) * 1000);
+        if($expiry <= $currentTime) {
+            throw new \Exception("token expired");
+        }
+
         return true;
     }
 

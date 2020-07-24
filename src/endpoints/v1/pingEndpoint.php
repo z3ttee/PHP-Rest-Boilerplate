@@ -2,12 +2,10 @@
 namespace App\Endpoint\v1;
 
 class PingEndpoint extends Endpoint {
-    function process() {
-        echo 'Processing..';
-    }
+    function process() {}
 
     function requiresAuthenticated() {
-        return true;
+        return false;
     }
 }
 ?>
