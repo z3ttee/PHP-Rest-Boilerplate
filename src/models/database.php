@@ -14,7 +14,6 @@ class Database {
         try {
             $this->_pdo = new \PDO('mysql:host='.Config::get('mysql/host').';port='.Config::get('mysql/port').';dbname='.Config::get('mysql/database').';charset=utf8', Config::get('mysql/username'), Config::get('mysql/password'));
             $this->_connected = true;
-            $this->setup();
         } catch (\PDOException $ex) {
             $this->_connected = false;
         }
@@ -22,13 +21,6 @@ class Database {
 
     public function hasConnection(){
         return $this->_connected;
-    }
-
-    private function setup() {
-        if(!$this->hasConnection()) return;
-
-        #$this->query("CREATE TABLE IF NOT EXISTS `".Config::get("mysql/prefix")."users`");
-        #$this->query("CREATE TABLE IF NOT EXISTS `".Config::get('mysql/prefix')."accounts` ( `id` INT NOT NULL AUTO_INCREMENT, `uid` INT(4) NOT NULL , `name` VARCHAR(32) NOT NULL , `realID` VARCHAR(50) NOT NULL , `email` VARCHAR(254) NOT NULL , `password` VARCHAR(256) NOT NULL , `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `roleID` INT NOT NULL DEFAULT 0, `avatar` TEXT , PRIMARY KEY (`id`), UNIQUE (`name`, `realID`, `uid`, `email`)) ENGINE = InnoDB;");
     }
 
     public static function getInstance() {
