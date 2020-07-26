@@ -5,20 +5,24 @@ class Request {
     private static $_instance;
     private $_params,
             $_version,
-            $_endpoint;
+            $_endpoint,
+            $_query,
+            $_authToken = null;
 
     public function __construct() {
-        $methodType = $_SERVER['REQUEST_METHOD'];
         $query = explode("/",$_SERVER['QUERY_STRING']);
+        $query = \array_filter($query, function($element) {
+            if(!\is_null($element) && !empty($element)) return $element;
+        });
 
         $this->_params = $_GET;
+        $this->_query = $query;
 
         if(count($this->_params) < 1) {
             throw new \Exception("Invalid url format");
         }
 
         $version = $query[0];
-        
 
         if(is_null($version) || empty($version) || !startsWith($version, 'v')) {
             throw new \Exception("Invalid api version provided");
@@ -33,6 +37,17 @@ class Request {
         
         $this->_version = $version;
         $this->_endpoint = $endpoint;
+    }
+
+    public function getMethod() {
+        return $_SERVER['REQUEST_METHOD'];
+    }
+
+    public function params() {
+        return $this->_params;
+    }
+    public function query() {
+        return $this->_query;
     }
 
     public function process() {
@@ -87,6 +102,7 @@ class Request {
             throw new \Exception("token expired");
         }
 
+        $this->_authToken = $bearerCode;
         return true;
     }
 
