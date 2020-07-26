@@ -49,6 +49,9 @@ class Request {
     public function query() {
         return $this->_query;
     }
+    public function authToken() {
+        return $this->_authToken;
+    }
 
     public function process() {
         $namespace = 'App\\Endpoint\\'.ucfirst($this->_version).'\\';
