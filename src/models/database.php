@@ -1,5 +1,6 @@
 <?
 namespace App\Models;
+use PDO;
 
 class Database {
     private static $_instance = null;
