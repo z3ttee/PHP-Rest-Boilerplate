@@ -7,7 +7,8 @@ class Request {
             $_version,
             $_endpoint,
             $_query,
-            $_authToken = null;
+            $_authToken = null,
+            $_userID = null;
 
     public function __construct() {
         $query = explode("/",$_SERVER['QUERY_STRING']);
@@ -51,6 +52,9 @@ class Request {
     }
     public function authToken() {
         return $this->_authToken;
+    }
+    public function userID() {
+        return $this->_userID;
     }
 
     public function process() {
@@ -99,6 +103,7 @@ class Request {
 
         $result = $result->first();
         $expiry = $result->expiry;
+        $this->_userID = $result->id;
 
         $currentTime = round(microtime(true) * 1000);
         if($expiry != -1 && $expiry <= $currentTime) {
