@@ -101,7 +101,7 @@ class Request {
         $expiry = $result->expiry;
 
         $currentTime = round(microtime(true) * 1000);
-        if($expiry <= $currentTime) {
+        if($expiry != -1 && $expiry <= $currentTime) {
             throw new \Exception("token expired");
         }
 
