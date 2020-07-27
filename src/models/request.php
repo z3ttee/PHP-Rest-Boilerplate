@@ -11,9 +11,11 @@ class Request {
             $_userID = null;
 
     public function __construct() {
-        $query = explode("/",$_SERVER['QUERY_STRING']);
+        $query = explode("/",\explode('&', $_SERVER['QUERY_STRING'], 2)[0]);
         $query = \array_filter($query, function($element) {
-            if(!\is_null($element) && !empty($element)) return $element;
+            if(!\is_null($element) && !empty($element)) {
+                return $element;
+            }
         });
 
         $this->_params = $_GET;
