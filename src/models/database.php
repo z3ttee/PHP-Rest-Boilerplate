@@ -90,6 +90,12 @@ class Database {
     public function get($table, $where = array(), $fields = array()) {
         return $this->action('SELECT', $table, $where, $fields);
     }
+    public function exists($table, $where = array()) {
+        return ((int) $this->action('SELECT', $table, $where, array('COUNT(*) AS amount'))->first()->amount) > 0;
+    }
+    public function amount($table, $where = array()) {
+        return ((int) $this->action('SELECT', $table, $where, array('COUNT(*) AS amount'))->first()->amount);
+    }
     public function delete($table, $where = array()) {
         return $this->action('DELETE', $table, $where);
     }
