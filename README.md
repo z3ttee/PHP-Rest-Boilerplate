@@ -1,4 +1,4 @@
-# PHP RestAPI Template
+# PHP RestAPI Boilerplate
 Template for simple rest api in php \
 
 ### Authorization
