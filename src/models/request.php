@@ -11,35 +11,37 @@ class Request {
             $_userID = null;
 
     public function __construct() {
-        $query = explode("/",\explode('&', $_SERVER['QUERY_STRING'], 2)[0]);
-        $query = \array_filter($query, function($element) {
-            if(!\is_null($element) && !empty($element)) {
-                return $element;
+        if($this->getMethod() != 'OPTIONS') {
+            $query = explode("/",\explode('&', $_SERVER['QUERY_STRING'], 2)[0]);
+            $query = \array_filter($query, function($element) {
+                if(!\is_null($element) && !empty($element)) {
+                    return $element;
+                }
+            });
+
+            $this->_params = $_GET;
+            $this->_query = $query;
+
+            if(count($this->_params) < 1) {
+                throw new \Exception("Invalid url format");
             }
-        });
 
-        $this->_params = $_GET;
-        $this->_query = $query;
+            $version = $query[0];
 
-        if(count($this->_params) < 1) {
-            throw new \Exception("Invalid url format");
+            if(is_null($version) || empty($version) || !startsWith($version, 'v')) {
+                throw new \Exception("Invalid api version provided");
+            }
+
+            $endpoint = \explode("&", $query[1])[0];
+
+            if(is_null($endpoint) || empty($endpoint)) {
+                throw new \Exception("Invalid endpoint");
+            }
+
+            
+            $this->_version = $version;
+            $this->_endpoint = $endpoint;
         }
-
-        $version = $query[0];
-
-        if(is_null($version) || empty($version) || !startsWith($version, 'v')) {
-            throw new \Exception("Invalid api version provided");
-        }
-
-        $endpoint = \explode("&", $query[1])[0];
-
-        if(is_null($endpoint) || empty($endpoint)) {
-            throw new \Exception("Invalid endpoint");
-        }
-
-        
-        $this->_version = $version;
-        $this->_endpoint = $endpoint;
     }
 
     public function getMethod() {
