@@ -122,23 +122,34 @@ class Database {
         return false;
     }
 
-    public function update($table, $id, $fields = array()) {
-        $set = '';
-        $x = 1;
+    public function update($table, $where = array(), $params = array()) {
+        if (count($where) === 3) {
+            $operators = array('=','>','<','>=','<=');
 
-        foreach ($fields as $name => $value) {
-            $set .= '{$name} = ?';
-            if ($x < count($fields)) {
-                $set .= ', ';
+            $field      = $where[0];
+            $operator   = $where[1];
+            $value      = $where[2];
+
+            if (in_array($operator, $operators)) {
+                $set = '';
+                $x = 1;
+
+                foreach ($params as $name => $v) {
+                    $set .= "`{$name}` = ?";
+                    if ($x < count($params)) {
+                        $set .= ', ';
+                    }
+                    $x++;
+                }
+
+                \array_push($params, $value);
+
+                $sql = "UPDATE `".Config::get('mysql/prefix').$table."` SET {$set} WHERE `{$field}` {$operator} ?;";
+                if (!$this->query($sql, $params)->error()) {
+                    return true;
+                }
             }
-            $x++;
         }
-
-        $sql = "UPDATE `".Config::get('mysql/prefix').$table."` SET {$set} WHERE `id` = {$id};";
-        if (!$this->query($sql, $fields)->error()) {
-            return true;
-        }
-
         return false;
     }
 
